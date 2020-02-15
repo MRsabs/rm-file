@@ -1,16 +1,25 @@
 {
-  "name": "raf-file",
-  "description": "remove all files (selected by extension) from a given directory and all sub-directories ",
-  "version": "1.0.0",
-  "license": "GPL-2.0",
-  "dependencies": {
-    "cfonts": "^2.6.1",
-    "chalk": "^3.0.0",
-    "fs-extra": "^8.1.0",
-    "glob": "^7.1.6",
-    "ora": "^4.0.3"
-  },
-  "devDependencies": {
-    "parcel-bundler": "^1.12.4"
-  }
+	"name": "rm-file",
+	"description": "remove all files (selected by extension) from a given directory and all sub-directories ",
+	"version": "1.0.0",
+	"license": "GPL-2.0",
+	"scripts": {
+		"start:dev": "parcel src/main.js --target node --out-dir build",
+		"genFiles": "node test/genFiles.js",
+		"start:file": "yarn genFiles && node build/main.js",
+		"build:bundle": "node ./build-cli/cli.js",
+		"clean": "rm -rf .cache build bin",
+		"build:bin": "yarn build:bundle && yarn pkg build/main.js --out-path bin"
+	},
+	"dependencies": {
+		"cfonts": "^2.6.1",
+		"chalk": "^3.0.0",
+		"fs-extra": "^8.1.0",
+		"glob": "^7.1.6",
+		"ora": "^4.0.3"
+	},
+	"devDependencies": {
+		"parcel-bundler": "^1.12.4",
+		"pkg": "^4.4.3"
+	}
 }

@@ -1,9 +1,9 @@
-const ora = require("ora");
-const cfonts = require('cfonts');
-const glob = require("glob");
-const path = require("path");
-const chalk = require("chalk");
-const fs = require("fs-extra");
+import ora from "ora";
+import { say } from 'cfonts';
+import glob from "glob";
+import path from "path";
+import chalk from "chalk";
+import fs from "fs-extra";
 const log = console.log;
 const readline = require("readline").createInterface({
 	input: process.stdin,
@@ -11,11 +11,16 @@ const readline = require("readline").createInterface({
 });
 
 // DEBUG only
-__dirname = path.join(__dirname, '../testing/')
+// __dirname = path.join(__dirname, '../test/')
 
-
-
-
+// DEBUG only
+function timeOut(delay) {
+	return new Promise((resolve, reject) => {
+		setTimeout(() => {
+			resolve(true);
+		}, delay);
+	});
+}
 
 function findFiles(file = "srt") {
 	return new Promise((resolve, reject) => {
@@ -44,27 +49,16 @@ function removeFile(targetPath) {
 	});
 }
 
-// debug
-function timeOut(delay) {
-	return new Promise((resolve, reject) => {
-		setTimeout(() => {
-			resolve(true);
-		}, delay);
-	});
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 (async function main() {
-	cfonts.say('Hi There!', {
-		font: 'block',              // define the font face
-		align: 'center',              // define text alignment
-		colors: ['system'],         // define all colors
-		background: 'transparent',  // define the background color, you can also use `backgroundColor` here as key
-		letterSpacing: 1,           // define letter spacing
-		lineHeight: 1,              // define the line height
-		space: true,                // define if the output text should have empty lines on top and on the bottom
-		maxLength: '0',             // define how many character can be on one line
-		gradient: ['red',"#f80"],            // define your two gradient colors
-		independentGradient: false, // define if you want to recalculate the gradient for each new line
+	say('Hi There!', {
+		font: 'block',              
+		align: 'center',                          
+		gradient: ['red',"#f80"],            
+
 	});
 
 	log(`You're in\n`, chalk.yellow(__dirname));
@@ -83,7 +77,7 @@ function timeOut(delay) {
 	// debug
 	await timeOut(1000);
 
-	spinner.succeed(`Found ${files.length} files`);
+	spinner.succeed(`Found ${numberWithCommas(files.length)} files`);
 
 	spinner.start("deleting files...");
 
@@ -93,5 +87,5 @@ function timeOut(delay) {
 		await removeFile(files[i]);
 		spinner.text = `${i} files deleted`;
 	}
-	spinner.succeed(`done deleting ${files.length} files`);
+	spinner.succeed(`done deleting ${numberWithCommas(files.length)} files`);
 })();

@@ -1,3 +1,6 @@
 node_modules
-testing
+test
 yarn-error.log
+build
+.cache
+bin

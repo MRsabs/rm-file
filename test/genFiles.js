@@ -1,36 +1,26 @@
-const fs = require('fs-extra')
-const path = require("path");
+var fs = require("fs");
+var path = require("path");
 
-(function generateFiles() {
-	const foldersNum = 2000
-	const filesNum = 100
+var foldersNum = 100;
+var filesNum = 10;
+var extension = ['srt', 'mp4']
 
-	console.log(`Generating ${foldersNum * filesNum} files in ${foldersNum} folders`)
-	const targetPath = path.join(__dirname, "./random/");
+console.log(`Generating ${numberWithCommas(foldersNum * filesNum)} files in ${numberWithCommas(foldersNum)} folders`);
+
+var targetPath = path.join(__dirname, "./random");
+
+fs.mkdirSync(targetPath);
+
+for (var i = 0; i < foldersNum; i++) {
+    var newDir = path.join(targetPath, `folder-${i}`);
+   	 	fs.mkdirSync(newDir);
+			for (var j = 0; j < filesNum; j++) {
+				var newFile = path.join(newDir, `file-${j}.${extension[Math.floor(Math.random() * 2)]}`);
+				fs.closeSync(fs.openSync(newFile, "w"));
+			}
+}
 
 
-
-	if (fs.existsSync(targetPath)) {
-		fs.removeSync(targetPath)
-		fs.mkdirSync(targetPath) 
-	} else {
-		fs.mkdirSync(targetPath) 
-	}
-
-
-	for (let i = 0; i < foldersNum; i++) {
-		if (fs.existsSync(path.join(targetPath, `folder-${i}`))) {
-			continue;
-		} else {
-			fs.mkdirSync(path.join(targetPath, `folder-${i}`))
-		}
-	}
-	for (let i = 0; i < foldersNum; i++) {
-		for (let j = 0; j < filesNum; j++) {
-			const filePath = path.join(targetPath, `/folder-${i}`, `file-${j}.srt`)
-			fs.closeSync(fs.openSync(filePath, 'w'));
-		}
-
-	}
-	console.log('Done !')
-})()
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
